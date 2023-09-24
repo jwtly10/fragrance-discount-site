@@ -30,7 +30,6 @@ public class ThePerfumeShopServiceTest {
                 .withHeader("Content-Type", "application/json")
                 .withBodyFile("theperfumeshop.json")));
 
-
         List<Product> products = thePerfumeShopService.getDiscountedProducts("http://localhost:8089/theperfumeshoptest", Gender.mens);
         assertThat(products.get(0).getBrand()).isEqualTo("Calvin Klein");
         assertThat(products.get(0).getOldPrice()).isEqualTo(90);
@@ -39,11 +38,22 @@ public class ThePerfumeShopServiceTest {
         assertThat(products.size()).isEqualTo(6);
     }
 
+    @Test
+    void Should_ConcurrentlyRequestMultiplePages(){
 
+        stubFor(get(urlMatching("/theperfumeshoptest.*")).willReturn(aResponse().withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBodyFile("theperfumeshopinitial.json")));
 
+        stubFor(get(urlMatching("/theperfumeshoptest.*&currentPage=0")).willReturn(aResponse().withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBodyFile("theperfumeshoppage0.json")));
 
+        stubFor(get(urlMatching("/theperfumeshoptest.*&currentPage=1")).willReturn(aResponse().withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBodyFile("theperfumeshoppage1.json")));
 
-
-
-    
+        List<Product> products = thePerfumeShopService.getDiscountedProducts("http://localhost:8089/theperfumeshoptest", Gender.womens);
+        assertThat(products.size()).isEqualTo(10);
+    }
 }
