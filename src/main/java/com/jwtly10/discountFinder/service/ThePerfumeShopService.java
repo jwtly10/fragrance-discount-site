@@ -55,7 +55,7 @@ public class ThePerfumeShopService implements IStoreService{
                     break;
             }
 
-            log.info("ThePerfumeShop API URL: {}", apiUrlIn);
+            log.debug("ThePerfumeShop API URL: {}", apiUrlIn);
 
             headers.set("User-Agent", "PostmanRuntime/7.32.3");
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
@@ -67,8 +67,8 @@ public class ThePerfumeShopService implements IStoreService{
             int totalPages = jsonObject.getJSONObject("pagination").getInt("totalPages");
             int totalResults = jsonObject.getJSONObject("pagination").getInt("totalResults");
 
-            log.debug("ThePerfumeShop Total pages to parse: {} ", totalPages);
-            log.debug("ThePerfumeShop Total products to parse: {}", totalResults);
+            log.info("ThePerfumeShop Total pages to parse for {}: {} ", gender, totalPages);
+            log.info("ThePerfumeShop Total products to parse: {}", totalResults);
 
 
             List<Product> productList = new ArrayList<>();
@@ -88,7 +88,7 @@ public class ThePerfumeShopService implements IStoreService{
                 }
             });
 
-            log.debug("Total products: " + productList.size());
+            log.info("Total products returned: {}", productList.size());
 
             return productList;
         } catch (RuntimeException e){
@@ -136,6 +136,7 @@ public class ThePerfumeShopService implements IStoreService{
     }
 
     private CompletableFuture<Collection<Product>> fetchProducts(String url, int page){
+        String newUrl = url + "&currentPage=" + page;
         return CompletableFuture.supplyAsync(() -> {
             List<Product> productList = new ArrayList<>();
 
@@ -144,7 +145,7 @@ public class ThePerfumeShopService implements IStoreService{
 
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            ResponseEntity<?> result = restTemplate.exchange(newUrl, HttpMethod.GET, entity, String.class);
             JSONObject jsonObject = new JSONObject(result.getBody().toString());
             JSONArray products = jsonObject.getJSONArray("products");
             for (int j = 0; j < products.length(); j++){
@@ -154,7 +155,6 @@ public class ThePerfumeShopService implements IStoreService{
                     productList.add(product);
                 }
             }
-
             return productList;
 
         });

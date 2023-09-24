@@ -26,17 +26,17 @@ public class ThePerfumeShopServiceTest {
     @Test
     void Should_ParseJsonFromAPIAndGetFirstDiscountedProduct(){
 
-        stubFor(get(urlMatching("/test/api")).willReturn(aResponse().withStatus(200)
+        stubFor(get(urlMatching("/theperfumeshoptest.*")).willReturn(aResponse().withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withBodyFile("theperfumeshop.json")));
 
 
-        List<Product> products = thePerfumeShopService.getDiscountedProducts("http://localhost:8089/test/api", Gender.mens);
+        List<Product> products = thePerfumeShopService.getDiscountedProducts("http://localhost:8089/theperfumeshoptest", Gender.mens);
         assertThat(products.get(0).getBrand()).isEqualTo("Calvin Klein");
         assertThat(products.get(0).getOldPrice()).isEqualTo(90);
         assertThat(products.get(0).getOldPrice()).isEqualTo(90);
         assertThat(products.get(0).getDiscount()).isEqualTo(55.57);
-        assertThat(products.size()).isEqualTo(12);
+        assertThat(products.size()).isEqualTo(6);
     }
 
 
