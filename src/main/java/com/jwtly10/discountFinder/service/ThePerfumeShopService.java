@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.jwtly10.discountFinder.exceptions.StoreServiceException;
+import com.jwtly10.discountFinder.models.Gender;
 import com.jwtly10.discountFinder.models.Product;
 import com.jwtly10.discountFinder.models.Site;
 import com.jwtly10.discountFinder.utils.Formatting;
@@ -28,12 +29,11 @@ import lombok.extern.log4j.Log4j2;
 public class ThePerfumeShopService implements IStoreService{
 
     private final Site site;
-    private final String apiUrl;
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
-    public ThePerfumeShopService(@Value("${theperfumeshop.apiUrl}") String apiUrl){
-        this.apiUrl = apiUrl;
+
+    public ThePerfumeShopService(){
         this.site = new Site(
                 "The Perfume Shop",
                 "https://www.theperfumeshop.com",
@@ -43,43 +43,54 @@ public class ThePerfumeShopService implements IStoreService{
         this.headers = new HttpHeaders();
     }
 
-    public List<Product> getDiscountedProducts(String gender){
-
+    public List<Product> getDiscountedProducts(String apiUrl, Gender gender){
+        String apiUrlIn = apiUrl;
         try{
-        headers.set("User-Agent", "PostmanRuntime/7.32.3");
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
-        ResponseEntity<?> result =
-            restTemplate.exchange(apiUrl + "thishis", HttpMethod.GET, entity, String.class);
-        JSONObject jsonObject = new JSONObject(result.getBody().toString());
-
-        int totalPages = jsonObject.getJSONObject("pagination").getInt("totalPages");
-        int totalResults = jsonObject.getJSONObject("pagination").getInt("totalResults");
-
-        log.info("ThePerfumeShop Total pages to parse: {} ", totalPages);
-        log.info("ThePerfumeShop Total products to parse: {}", totalResults);
-
-
-        List<Product> productList = new ArrayList<>();
-
-
-        List<CompletableFuture<Collection<Product>>> futures = new ArrayList<>();
-
-        for (int i =0; i <= totalPages; i++){
-            futures.add(fetchProducts(i));
-        }
-
-        futures.forEach(future -> {
-            try {
-                productList.addAll(future.get());
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
+            switch (gender){
+                case mens: 
+                    apiUrlIn = apiUrl.replace("gender", "C102");
+                    break;
+                case womens: 
+                    apiUrlIn = apiUrl.replace("gender", "C101");
+                    break;
             }
-        });
 
-        log.info("Total products: " + productList.size());
+            log.info("ThePerfumeShop API URL: {}", apiUrlIn);
 
-        return productList;
+            headers.set("User-Agent", "PostmanRuntime/7.32.3");
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+            ResponseEntity<?> result =
+                restTemplate.exchange(apiUrlIn, HttpMethod.GET, entity, String.class);
+            JSONObject jsonObject = new JSONObject(result.getBody().toString());
+
+            int totalPages = jsonObject.getJSONObject("pagination").getInt("totalPages");
+            int totalResults = jsonObject.getJSONObject("pagination").getInt("totalResults");
+
+            log.debug("ThePerfumeShop Total pages to parse: {} ", totalPages);
+            log.debug("ThePerfumeShop Total products to parse: {}", totalResults);
+
+
+            List<Product> productList = new ArrayList<>();
+
+
+            List<CompletableFuture<Collection<Product>>> futures = new ArrayList<>();
+
+            for (int i =0; i <= totalPages; i++){
+                futures.add(fetchProducts(apiUrlIn, i));
+            }
+
+            futures.forEach(future -> {
+                try {
+                    productList.addAll(future.get());
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            });
+
+            log.debug("Total products: " + productList.size());
+
+            return productList;
         } catch (RuntimeException e){
             log.error("Error Parsing {} Store JSON, {}", site.getName(), e.getMessage(), e);
             throw new StoreServiceException("Error Parsing " + site.getName() + " Store JSON");
@@ -124,7 +135,7 @@ public class ThePerfumeShopService implements IStoreService{
         return product;
     }
 
-    private CompletableFuture<Collection<Product>> fetchProducts(int page){
+    private CompletableFuture<Collection<Product>> fetchProducts(String url, int page){
         return CompletableFuture.supplyAsync(() -> {
             List<Product> productList = new ArrayList<>();
 
@@ -133,7 +144,7 @@ public class ThePerfumeShopService implements IStoreService{
 
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<?> result = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
+            ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             JSONObject jsonObject = new JSONObject(result.getBody().toString());
             JSONArray products = jsonObject.getJSONArray("products");
             for (int j = 0; j < products.length(); j++){

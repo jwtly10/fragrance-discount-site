@@ -2,8 +2,9 @@ package com.jwtly10.discountFinder.service;
 
 import java.util.List;
 
+import com.jwtly10.discountFinder.models.Gender;
 import com.jwtly10.discountFinder.models.Product;
 
 public interface IStoreService {
-    public List<Product> getDiscountedProducts(String gender);
+    public List<Product> getDiscountedProducts(String apiUrl, Gender gender);
 }
