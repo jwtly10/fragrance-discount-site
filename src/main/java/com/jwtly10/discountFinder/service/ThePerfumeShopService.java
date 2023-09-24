@@ -155,6 +155,9 @@ public class ThePerfumeShopService implements IStoreService{
                     productList.add(product);
                 }
             }
+
+            log.debug("ThePerfumeShop Parsed {} products from page {}", productList.size(), page);
+
             return productList;
 
         });
