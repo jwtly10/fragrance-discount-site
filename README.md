@@ -7,10 +7,10 @@ Some features:
 - Calling the products endpoint
 
 ```
-api/v1/stores/theperfumeshop/mens
+api/v1/stores/theperfumeshop/mens?sort=max_discount
 ```
 
-Returns a list of discounted fragrance products from the [ThePerfumeShop's](https://www.theperfumeshop.com) Mens range.
+Returns a list of discounted fragrance products from the [ThePerfumeShop's](https://www.theperfumeshop.com) Mens range, sorted by Most to Least discounted.
 
 Behind the scenes, this calls the stores' internal APIs (where possible), and parses each potential page concurrently, checking 1000's of products for discounts in only a few seconds - returning a list of only the on sale products on the site. 
 
