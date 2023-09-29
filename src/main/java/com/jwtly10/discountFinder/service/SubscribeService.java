@@ -52,12 +52,7 @@ public class SubscribeService {
     }
 
     private boolean checkEmailExists(String email) {
-
         List<Subscription> sub = subscriptionRepository.findByEmail(email);
-        if (sub.size() > 0) {
-            return false;
-        }
-
-        return true;
+        return !sub.isEmpty();
     }
 }

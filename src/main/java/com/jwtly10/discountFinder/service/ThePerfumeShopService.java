@@ -8,7 +8,6 @@ import java.util.concurrent.CompletableFuture;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -99,7 +98,7 @@ public class ThePerfumeShopService implements IStoreService{
 
     public Product parseJson(JSONObject json){
 
-        Product product = new Product();
+        Product product;
 
         try {
             String url = site.getUrl() + json.getString("url");
@@ -115,24 +114,29 @@ public class ThePerfumeShopService implements IStoreService{
             double discountPerc = Formatting.round(oldPrice != 0 ? (oldPrice-currentPrice)/oldPrice*100 : 0, 2);
 
 
-            product.setUrl(url);
-            product.setBrand(brand);
-            product.setItemName(itemName);
-            product.setCurrentPrice(currentPrice);
-            product.setType(type);
-            product.setOldPrice(oldPrice);
-            product.setSaving(saving);
-            product.setDiscount(discountPerc);
-            product.setImageUrl(imageUrl);
-            product.setInStock(inStock);
-            product.setSize(size);
-            product.setSite(site);
+            product = Product.builder()
+                .url(url)
+                .brand(brand)
+                .itemName(itemName)
+                .currentPrice(currentPrice)
+                .type(type)
+                .oldPrice(oldPrice)
+                .saving(saving)
+                .discount(discountPerc)
+                .imageUrl(imageUrl)
+                .inStock(inStock)
+                .size(size)
+                .site(site)
+                .build();
+
+            return product;
 
         } catch (JSONException e) {
             log.error("Error parsing JSON Product Object: {}", e.getMessage(), e);
         }
 
-        return product;
+        return Product.builder().build();
+
     }
 
     private CompletableFuture<Collection<Product>> fetchProducts(String url, int page){
