@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar'
 
 function NavBar() {
     return (
-        <Navbar expand="lg">
+        <Navbar expand="lg" className="mb-3">
             <Container>
                 <Navbar.Brand href="/">discount-finder-frontend</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />

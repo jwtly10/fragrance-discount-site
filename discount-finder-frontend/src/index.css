@@ -1,3 +1,22 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+html, body {
+    height: 100%;
+}
+
+footer{ 
+    margin-top: auto;
+    background-color: #f5f5f5;
+}
+
+nav{
+    background-color: #f5f5f5;
+}
+
 .procut-image {
     position: relative;
     transition: all 0.3s ease 0s;

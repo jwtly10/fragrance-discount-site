@@ -25,7 +25,7 @@ function ProductList({
                               )
                           })
                         : products.map((product: Product, index: number) => (
-                              <Col key={index} className="mb-4">
+                              <Col md={4} key={index} className="mb-4">
                                   <Product product={product} />
                               </Col>
                           ))}

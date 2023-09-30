@@ -45,6 +45,7 @@ function ProductsPage() {
     ) {
         setError('')
         setProducts([])
+        setIsLoading(true)
         apiService
             .getProducts(gender, filter)
             .then((products) => {
@@ -63,6 +64,9 @@ function ProductsPage() {
                 <p className="text-danger text-center">{error}</p>
             ) : (
                 <>
+                    <h1 className="text-center mb-4">
+                        {gender == 'mens' ? 'Mens Products' : 'Womens Products'}
+                    </h1>
                     <FilterOptions
                         setSearch={setSearch}
                         handleFilter={handleFilter}

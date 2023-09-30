@@ -37,7 +37,8 @@ function Product({ product }: { product: Product }) {
                         <a
                             href={product.url}
                             target="_blank"
-                            className="btn btn-danger mt-3">
+                            className="btn btn-danger mt-3"
+                        >
                             <i className="fas fa-shopping-cart"></i> Buy Now
                         </a>
                     </div>
