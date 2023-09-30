@@ -24,6 +24,7 @@ function FilterOptions({
                 return ''
         }
     }
+
     const content = (
         <div>
             <Filter handleFilter={handleFilter} currentFilter={currentFilter} />
@@ -38,11 +39,12 @@ function FilterOptions({
                 </Col>
 
                 <Col className="">
-                    <Popover trigger="click" content={content}>
-                        <Button className="btn-success w-100">
-                            Filters
-                            {filterText()}
-                        </Button>
+                    <Popover
+                        placement="bottom"
+                        trigger="click"
+                        content={content}
+                    >
+                        <Button className="btn-success w-100">Filters</Button>
                     </Popover>
                 </Col>
             </Row>

@@ -15,7 +15,7 @@ function ProductsPage() {
     const [sortParam, setSortParam] = useSearchParams()
 
     useEffect(() => {
-        getProducts(gender, sortParam.get('sort') || 'max_discount')
+        getProducts(gender, sortParam.get('sort') || 'none')
     }, [])
 
     const filteredProducts = products.filter((product) => {
@@ -36,13 +36,10 @@ function ProductsPage() {
             params.set('sort', filter)
             return params
         })
-        getProducts(gender, sortParam.get('sort') || 'max_discount')
+        getProducts(gender, sortParam.get('sort') || 'none')
     }
 
-    function getProducts(
-        gender: string = 'null',
-        filter: string = 'max_discount'
-    ) {
+    function getProducts(gender: string = 'null', filter: string = 'none') {
         setError('')
         setProducts([])
         setIsLoading(true)
@@ -70,7 +67,7 @@ function ProductsPage() {
                     <FilterOptions
                         setSearch={setSearch}
                         handleFilter={handleFilter}
-                        currentFilter={sortParam.get('sort') || 'max_discount'}
+                        currentFilter={sortParam.get('sort') || 'none'}
                     />
 
                     <ProductList
