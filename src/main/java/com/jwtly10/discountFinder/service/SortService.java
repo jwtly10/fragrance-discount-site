@@ -16,8 +16,14 @@ public class SortService {
         return switch (Sort.valueOf(sort)) {
             case max_discount -> sortByDiscount(products);
             case max_price -> sortByPrice(products);
+            case max_saving -> sortBySaving(products);
             case none -> products;
         };
+    }
+
+    private static List<Product> sortBySaving(List<Product> products) {
+        products.sort((p1, p2) -> Double.compare(p2.getSaving(), p1.getSaving()));
+        return products;
     }
 
     private static List<Product> sortByDiscount(List<Product> products) {
