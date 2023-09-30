@@ -1,16 +1,10 @@
 import { Form } from 'react-bootstrap'
-function Search({
-    setSearch,
-    search,
-}: {
-    setSearch: (e: string) => void
-    search: string
-}) {
+function Search({ setSearch }: { setSearch: (e: string) => void }) {
     return (
         <Form.Control
             type="text"
-            className="mb-3"
             onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search Brand or Product"
         />
     )
 }

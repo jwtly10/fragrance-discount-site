@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import apiService from '../services/apiService'
 import { useParams, useSearchParams } from 'react-router-dom'
 import Filter from '../components/Filter'
+import { Container } from 'react-bootstrap'
+import FilterOptions from '../components/FilterOptions'
 
 function ProductsPage() {
     const [error, setError] = useState<string>('')
@@ -59,23 +61,24 @@ function ProductsPage() {
     }
 
     return (
-        <>
+        <Container>
             {error ? (
                 <p className="text-danger text-center">{error}</p>
             ) : (
                 <>
-                    <Search setSearch={setSearch} search={search} />
-                    <Filter
+                    <FilterOptions
+                        setSearch={setSearch}
                         handleFilter={handleFilter}
                         currentFilter={sortParam.get('sort') || 'max_discount'}
                     />
+
                     <ProductList
                         products={filteredProducts}
                         isLoading={isLoading}
                     />
                 </>
             )}
-        </>
+        </Container>
     )
 }
 

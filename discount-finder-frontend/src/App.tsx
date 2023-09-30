@@ -1,5 +1,3 @@
-import { Container } from 'react-bootstrap'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import NavBar from './components/NavBar'
@@ -9,9 +7,7 @@ function App() {
     return (
         <>
             <NavBar />
-            <Container>
-                <AppRouter />
-            </Container>
+            <AppRouter />
         </>
     )
 }

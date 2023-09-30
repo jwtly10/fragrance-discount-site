@@ -4,12 +4,12 @@ import Navbar from 'react-bootstrap/Navbar'
 
 function NavBar() {
     return (
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg">
             <Container>
                 <Navbar.Brand href="/">discount-finder-frontend</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
+                    <Nav className="">
                         <Nav.Link href="/products/mens">Mens</Nav.Link>
                         <Nav.Link href="/products/womens">Womens</Nav.Link>
                     </Nav>
