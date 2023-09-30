@@ -1,9 +1,7 @@
 import ProductList from '../components/ProductList'
-import Search from '../components/Search'
 import { useEffect, useState } from 'react'
 import apiService from '../services/apiService'
 import { useParams, useSearchParams } from 'react-router-dom'
-import Filter from '../components/Filter'
 import { Container } from 'react-bootstrap'
 import FilterOptions from '../components/FilterOptions'
 
@@ -11,7 +9,7 @@ function ProductsPage() {
     const [error, setError] = useState<string>('')
     const [search, setSearch] = useState<string>('')
     const [products, setProducts] = useState<Product[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     const { gender } = useParams()
     const [sortParam, setSortParam] = useSearchParams()
@@ -47,7 +45,6 @@ function ProductsPage() {
     ) {
         setError('')
         setProducts([])
-        setIsLoading(true)
         apiService
             .getProducts(gender, filter)
             .then((products) => {

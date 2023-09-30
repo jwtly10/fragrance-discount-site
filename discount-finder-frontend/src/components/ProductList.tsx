@@ -1,5 +1,6 @@
 import { Col, Container, Row } from 'react-bootstrap'
 import Product from './Product'
+import PlaceholderProduct from './PlaceholderProductList'
 
 function ProductList({
     products,
@@ -15,11 +16,19 @@ function ProductList({
             )}
             <Container className="d-flex justify-content-center align-items-center">
                 <Row>
-                    {products.map((product: Product, index: number) => (
-                        <Col key={index} className="mb-4">
-                            <Product product={product} />
-                        </Col>
-                    ))}
+                    {isLoading
+                        ? [...Array(12)].map((_, index: number) => {
+                              return (
+                                  <Col key={index} className="mb-4">
+                                      <PlaceholderProduct />
+                                  </Col>
+                              )
+                          })
+                        : products.map((product: Product, index: number) => (
+                              <Col key={index} className="mb-4">
+                                  <Product product={product} />
+                              </Col>
+                          ))}
                 </Row>
             </Container>
         </>
