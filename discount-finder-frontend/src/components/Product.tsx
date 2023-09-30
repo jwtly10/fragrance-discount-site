@@ -3,8 +3,8 @@ import { Card, CardBody, CardSubtitle, CardTitle } from 'react-bootstrap'
 function Product({ product }: { product: Product }) {
     return (
         <div className="psuedo-border">
-            <Card className="p-1" style={{ maxWidth: 300 }}>
-                <div className="product-image d-flex justify-content-center">
+            <Card className="p-1 w-90">
+                <div className="product-image d-flex justify-content-center align-items-center">
                     <img
                         src={product.imageUrl}
                         style={{ width: '300px' }}
@@ -18,17 +18,21 @@ function Product({ product }: { product: Product }) {
                     <CardSubtitle>{product.brand}</CardSubtitle>
                     <CardTitle>{product.itemName}</CardTitle>
                     <CardSubtitle>{product.type}</CardSubtitle>
-                    <div className="buy d-flex justify-content-between align-items-center">
+                    <div className="buy d-flex justify-content-between align-items-center mw-md-80">
                         <div className="price text-dark">
                             <h5 className="mt-4">
-                                Now £{product.currentPrice}
+                                Now <br />£{product.currentPrice}
                             </h5>
                         </div>
                         <div className="price text-danger">
-                            <h5 className="mt-4">Was £{product.oldPrice}</h5>
+                            <h5 className="mt-4">
+                                Was <br />£{product.oldPrice}
+                            </h5>
                         </div>
                         <div className="price text-success">
-                            <h5 className="mt-4">Save £{product.saving}</h5>
+                            <h5 className="mt-4">
+                                Save <br />£{product.saving}
+                            </h5>
                         </div>
                         <a
                             href={product.url}
