@@ -5,7 +5,7 @@ public enum Sort {
     max_price,
     none;
 
-    public class Default {
+    public static class Default {
         public static final String DEFAULT_SORT = "none";
     }
 }

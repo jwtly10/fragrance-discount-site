@@ -1,8 +1,8 @@
 package com.jwtly10.discountFinder.controllers;
 
 import com.jwtly10.discountFinder.exceptions.ApiError;
+import com.jwtly10.discountFinder.exceptions.SortServiceException;
 import com.jwtly10.discountFinder.exceptions.StoreServiceException;
-import com.jwtly10.discountFinder.models.Gender;
 import com.jwtly10.discountFinder.models.Product;
 import com.jwtly10.discountFinder.models.Sort;
 import com.jwtly10.discountFinder.service.SortService;
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/stores")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class StoreController {
 
@@ -28,13 +28,19 @@ public class StoreController {
     private ThePerfumeShopService thePerfumeShopService;
 
     // eg http://localhost:8080/api/v1/stores/theperfumeshop/mens?sort=max_discount
-    @GetMapping("/theperfumeshop/{gender}")
-    public ResponseEntity<List<Product>> getThePerfumeShopProducts(@PathVariable("gender") Gender gender, @RequestParam(required = false, defaultValue = Sort.Default.DEFAULT_SORT) Sort sort) {
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/products/{gender}")
+    public ResponseEntity<List<Product>> getThePerfumeShopProducts(@PathVariable("gender") String gender, @RequestParam(required = false, defaultValue = Sort.Default.DEFAULT_SORT) String sort) {
         return ResponseEntity.ok(SortService.sort(thePerfumeShopService.getDiscountedProducts(thePerfumeShopApiUrl, gender), sort));
     }
 
     @ExceptionHandler(StoreServiceException.class)
     ResponseEntity<ApiError> handleExternalAPIException(StoreServiceException e) {
         return ResponseEntity.internalServerError().body(new ApiError(e.getMessage()));
+    }
+
+    @ExceptionHandler(SortServiceException.class)
+    ResponseEntity<ApiError> handleSortServiceException(SortServiceException e) {
+        return ResponseEntity.badRequest().body(new ApiError(e.getMessage()));
     }
 }

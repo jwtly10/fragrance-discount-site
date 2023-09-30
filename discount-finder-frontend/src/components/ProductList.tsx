@@ -6,7 +6,7 @@ function ProductList({ products }: { products: Product[] }) {
         <Container>
             <Row>
                 {products.map((product: Product, index: number) => (
-                    <Col key={index} className="mb-4 mb-md-0">
+                    <Col key={index} className="mb-4">
                         <Product product={product} />
                     </Col>
                 ))}

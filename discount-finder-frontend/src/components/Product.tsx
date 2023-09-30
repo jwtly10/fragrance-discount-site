@@ -1,18 +1,11 @@
-import {
-    Card,
-    CardBody,
-    CardImg,
-    CardSubtitle,
-    CardTitle,
-} from 'react-bootstrap'
+import { Card, CardBody, CardSubtitle, CardTitle } from 'react-bootstrap'
 
 function Product({ product }: { product: Product }) {
-    console.log(product)
     return (
-        <Card>
+        <Card className="p-1">
             <div className="product-image d-flex justify-content-center">
                 <img
-                    src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/vans.png"
+                    src={product.imageUrl}
                     style={{ width: '300px' }}
                     alt="Vans"
                 />
@@ -33,8 +26,11 @@ function Product({ product }: { product: Product }) {
                     <div className="price text-success">
                         <h5 className="mt-4">Save £{product.saving}</h5>
                     </div>
-                    <a href="#" className="btn btn-danger mt-3">
-                        <i className="fas fa-shopping-cart"></i> Add to Cart
+                    <a
+                        href={product.url}
+                        target="_blank"
+                        className="btn btn-danger mt-3">
+                        <i className="fas fa-shopping-cart"></i> Buy Now
                     </a>
                 </div>
             </CardBody>

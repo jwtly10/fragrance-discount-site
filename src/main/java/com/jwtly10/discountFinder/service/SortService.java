@@ -1,14 +1,19 @@
 package com.jwtly10.discountFinder.service;
 
+import com.jwtly10.discountFinder.exceptions.SortServiceException;
 import com.jwtly10.discountFinder.models.Product;
 import com.jwtly10.discountFinder.models.Sort;
+import com.jwtly10.discountFinder.utils.Validate;
 
 import java.util.List;
 
 public class SortService {
 
-    public static List<Product> sort(List<Product> products, Sort sort) {
-        return switch (sort) {
+    public static List<Product> sort(List<Product> products, String sort) {
+        if (!Validate.isSort(sort)) {
+            throw new SortServiceException("Invalid Sort: " + sort);
+        }
+        return switch (Sort.valueOf(sort)) {
             case max_discount -> sortByDiscount(products);
             case max_price -> sortByPrice(products);
             case none -> products;
