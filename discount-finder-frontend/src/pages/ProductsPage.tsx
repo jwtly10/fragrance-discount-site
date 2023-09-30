@@ -2,14 +2,21 @@ import ProductList from '../components/ProductList'
 import Search from '../components/Search'
 import { useEffect, useState } from 'react'
 import apiService from '../services/apiService'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
+import Filter from '../components/Filter'
 
 function ProductsPage() {
     const [error, setError] = useState<string>('')
     const [search, setSearch] = useState<string>('')
     const [products, setProducts] = useState<Product[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const { gender } = useParams()
+    const [sortParam, setSortParam] = useSearchParams()
+
+    useEffect(() => {
+        getProducts(gender, sortParam.get('sort') || 'max_discount')
+    }, [])
 
     const filteredProducts = products.filter((product) => {
         return (
@@ -24,18 +31,33 @@ function ProductsPage() {
         )
     })
 
-    useEffect(() => {
+    function handleFilter(filter: string) {
+        setSortParam((params) => {
+            params.set('sort', filter)
+            return params
+        })
+        getProducts(gender, sortParam.get('sort') || 'max_discount')
+    }
+
+    function getProducts(
+        gender: string = 'null',
+        filter: string = 'max_discount'
+    ) {
         setError('')
         setProducts([])
+        setIsLoading(true)
         apiService
-            .getProducts(gender || 'null', 'max_discount')
+            .getProducts(gender, filter)
             .then((products) => {
                 setProducts(products)
+                setIsLoading(false)
             })
             .catch((error) => {
                 setError(error.data.message)
+                setIsLoading(false)
             })
-    }, [])
+    }
+
     return (
         <>
             {error ? (
@@ -43,7 +65,14 @@ function ProductsPage() {
             ) : (
                 <>
                     <Search setSearch={setSearch} search={search} />
-                    <ProductList products={filteredProducts} />
+                    <Filter
+                        handleFilter={handleFilter}
+                        currentFilter={sortParam.get('sort') || 'max_discount'}
+                    />
+                    <ProductList
+                        products={filteredProducts}
+                        isLoading={isLoading}
+                    />
                 </>
             )}
         </>

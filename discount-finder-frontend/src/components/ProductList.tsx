@@ -1,10 +1,16 @@
 import { Col, Container, Row } from 'react-bootstrap'
 import Product from './Product'
 
-function ProductList({ products }: { products: Product[] }) {
+function ProductList({
+    products,
+    isLoading,
+}: {
+    products: Product[]
+    isLoading: boolean
+}) {
     return (
         <>
-            {products.length === 0 && (
+            {products.length === 0 && !isLoading && (
                 <p className="text-dark text-center">No products found</p>
             )}
             <Container className="d-flex justify-content-center align-items-center">

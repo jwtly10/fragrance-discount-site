@@ -92,7 +92,7 @@ public class ThePerfumeShopService implements IStoreService {
             return productList;
         } catch (RuntimeException e) {
             log.error("Error Parsing {} Store JSON, {}", site.getName(), e.getMessage(), e);
-            throw new StoreServiceException("Error Parsing " + site.getName() + " Store JSON");
+            throw new StoreServiceException("Error Parsing " + site.getName() + ". Please try again.");
         }
     }
 
