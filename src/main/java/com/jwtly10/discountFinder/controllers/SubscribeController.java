@@ -24,7 +24,9 @@ public class SubscribeController {
 
     @PostMapping("/subscribe/{email}")
     public ResponseEntity<?> subscribe(@PathVariable String email) {
-        return ResponseEntity.ok(subscribeService.subscribe(email));
+        // return ResponseEntity.ok(subscribeService.subscribe(email));
+        // Not supported yet
+        return ResponseEntity.badRequest().body(new ApiError("Subscriptions are not supported yet"));
     }
 
     @ExceptionHandler(SubscriptionServiceException.class)
