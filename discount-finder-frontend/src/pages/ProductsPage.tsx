@@ -51,7 +51,11 @@ function ProductsPage() {
                 setIsLoading(false)
             })
             .catch((error) => {
-                setError(error.data.message)
+                if (error.data === undefined) {
+                    setError(error)
+                } else {
+                    setError(error.data.message)
+                }
                 setIsLoading(false)
             })
     }

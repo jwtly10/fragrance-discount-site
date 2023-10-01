@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
         registry.addMapping("/api/v1/**")
-            .allowedOrigins("http://localhost:5173")
+            .allowedOrigins("http://localhost:5173", "https://main--aquamarine-boba-2b13ea.netlify.app")
             .allowedMethods("GET");
     }
 
