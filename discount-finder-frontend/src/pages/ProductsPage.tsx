@@ -43,6 +43,7 @@ function ProductsPage() {
         setError('')
         setProducts([])
         setIsLoading(true)
+
         apiService
             .getProducts(gender, filter)
             .then((products) => {
@@ -50,7 +51,6 @@ function ProductsPage() {
                 setIsLoading(false)
             })
             .catch((error) => {
-                console.log(error.data.message)
                 setError(error.data.message)
                 setIsLoading(false)
             })
