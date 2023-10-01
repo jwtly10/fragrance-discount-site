@@ -12,18 +12,18 @@ function FilterOptions({
     handleFilter: (e: string) => void
     currentFilter: string
 }) {
-    const filterText = () => {
-        switch (currentFilter) {
-            case 'max_discount':
-                return ' - Discount % High to Low'
-            case 'max_price':
-                return ' - Price £ High to Low'
-            case 'max_saving':
-                return ' - Saving £ High to Low'
-            default:
-                return ''
-        }
-    }
+    // const filterText = () => {
+    //     switch (currentFilter) {
+    //         case 'max_discount':
+    //             return ' - Discount % High to Low'
+    //         case 'max_price':
+    //             return ' - Price £ High to Low'
+    //         case 'max_saving':
+    //             return ' - Saving £ High to Low'
+    //         default:
+    //             return ''
+    //     }
+    // }
 
     const content = (
         <div>

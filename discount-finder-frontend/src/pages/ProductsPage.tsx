@@ -16,7 +16,7 @@ function ProductsPage() {
 
     useEffect(() => {
         getProducts(gender, sortParam.get('sort') || 'none')
-    }, [])
+    })
 
     const filteredProducts = products.filter((product) => {
         return (
