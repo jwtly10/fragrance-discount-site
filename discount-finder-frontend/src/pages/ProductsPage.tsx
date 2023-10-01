@@ -50,6 +50,7 @@ function ProductsPage() {
                 setIsLoading(false)
             })
             .catch((error) => {
+                console.log(error.data.message)
                 setError(error.data.message)
                 setIsLoading(false)
             })

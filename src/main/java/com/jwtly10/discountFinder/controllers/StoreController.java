@@ -1,24 +1,30 @@
 package com.jwtly10.discountFinder.controllers;
 
 import com.jwtly10.discountFinder.exceptions.ApiError;
+import com.jwtly10.discountFinder.exceptions.RateLimitException;
 import com.jwtly10.discountFinder.exceptions.SortServiceException;
 import com.jwtly10.discountFinder.exceptions.StoreServiceException;
 import com.jwtly10.discountFinder.models.Product;
 import com.jwtly10.discountFinder.models.Sort;
 import com.jwtly10.discountFinder.service.SortService;
 import com.jwtly10.discountFinder.service.ThePerfumeShopService;
-import lombok.RequiredArgsConstructor;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class StoreController {
 
     @Value("${theperfumeshop.api.url}")
@@ -27,11 +33,32 @@ public class StoreController {
     @Autowired
     private ThePerfumeShopService thePerfumeShopService;
 
-    // eg http://localhost:8080/api/v1/stores/theperfumeshop/mens?sort=max_discount
+    private final Bucket bucket;
+
+    public StoreController(
+            @Value("${rateLimit.capacity}") int capacity, 
+            @Value("${rateLimit.duration}") int duration, 
+            @Value("${rateLimit.refill}") long refill){
+        Bandwidth limit = Bandwidth.classic(capacity, 
+                Refill.greedy(refill, Duration.ofMinutes(duration)));
+        this.bucket = Bucket.builder()
+            .addLimit(limit)
+            .build();
+            }
+
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/products/{gender}")
     public ResponseEntity<List<Product>> getThePerfumeShopProducts(@PathVariable("gender") String gender, @RequestParam(required = false, defaultValue = Sort.Default.DEFAULT_SORT) String sort) {
-        return ResponseEntity.ok(SortService.sort(thePerfumeShopService.getDiscountedProducts(thePerfumeShopApiUrl, gender), sort));
+        if (bucket.tryConsume(1)){
+            return ResponseEntity.ok(SortService.sort(thePerfumeShopService.getDiscountedProducts(thePerfumeShopApiUrl, gender), sort));
+        }
+
+        throw new RateLimitException("Too many requests. Please try again in a few minutes.");
+    }
+
+    @ExceptionHandler(RateLimitException.class)
+    ResponseEntity<ApiError> handleRateLimitException(RateLimitException e) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(new ApiError(e.getMessage()));
     }
 
     @ExceptionHandler(StoreServiceException.class)
