@@ -29,15 +29,14 @@ function Filter({
                 }}
                 className="form-select mw-25 mb-3"
                 defaultValue={currentFilter}
-                value={optionState}
-            >
+                value={optionState}>
                 <option value="none">None</option>
-                <option value="max_discount">Discount % High To Low</option>
-                <option defaultChecked value="max_saving">
-                    Saving £ High To Low
-                </option>
                 <option defaultChecked value="max_price">
                     Price High To Low
+                </option>
+                <option value="max_discount">Discount High To Low</option>
+                <option defaultChecked value="max_saving">
+                    Savings High To Low
                 </option>
             </Form.Select>
 
@@ -51,8 +50,7 @@ function Filter({
                 onClick={() => {
                     handleClear()
                 }}
-                className="w-100"
-            >
+                className="w-100">
                 Clear Filters
             </Button>
         </Container>
