@@ -40,12 +40,12 @@ function Filter({
                 </option>
             </Form.Select>
 
-            <Form.Label>Filter By Brand</Form.Label>
+            {/* <Form.Label>Filter By Brand</Form.Label>
             <Form.Select className="mb-3">
                 <option value="none">None</option>
                 <option value="calvin_klein">Calvin Klein</option>
                 <option value="amarni">Amarni</option>
-            </Form.Select>
+            </Form.Select> */}
             <Button
                 onClick={() => {
                     handleClear()
