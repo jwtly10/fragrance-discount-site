@@ -6,7 +6,7 @@ function NavBar() {
     return (
         <Navbar expand="lg" className="mb-3">
             <Container>
-                <Navbar.Brand href="/">discount-finder-frontend</Navbar.Brand>
+                <Navbar.Brand href="/">Fragrance Finder UK</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="">
