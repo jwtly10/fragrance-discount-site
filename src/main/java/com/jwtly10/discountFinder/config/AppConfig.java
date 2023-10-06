@@ -1,5 +1,6 @@
 package com.jwtly10.discountFinder.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -14,6 +15,18 @@ import java.net.Proxy;
 @Configuration
 public class AppConfig {
 
+    @Value("${proxy.host}")
+    private String proxyHost;
+
+    @Value("${proxy.port}")
+    private int proxyPort;
+
+    @Value("${proxy.username}")
+    private String proxyUsername;
+
+    @Value("${proxy.password}")
+    private String proxyPassword;
+
     @Bean
     public RestTemplate restTemplate() throws Exception {
         return new RestTemplate(clientHttpRequestFactory());
@@ -21,11 +34,6 @@ public class AppConfig {
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-
-        String proxyHost = "gb.smartproxy.com";
-        int proxyPort = 30001;
-        String proxyUsername = "sptkytvkd0";
-        String proxyPassword = "7EjycI298PiuvyqvwL";
 
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
         factory.setProxy(proxy);
