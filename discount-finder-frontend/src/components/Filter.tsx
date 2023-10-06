@@ -28,9 +28,7 @@ function Filter({
                     handleOptionChange(e)
                 }}
                 className="form-select mw-25 mb-3"
-                defaultValue={currentFilter}
-                value={optionState}>
-                <option value="none">None</option>
+                value={optionState || currentFilter}>
                 <option defaultChecked value="max_price">
                     Price High To Low
                 </option>

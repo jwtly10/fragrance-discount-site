@@ -4,11 +4,11 @@ import Filter from './Filter'
 import { Popover } from 'antd'
 
 function FilterOptions({
-    setSearch,
+    handleSearch,
     handleFilter,
     currentFilter,
 }: {
-    setSearch: (e: string) => void
+    handleSearch: (e: string) => void
     handleFilter: (e: string) => void
     currentFilter: string
 }) {
@@ -35,15 +35,14 @@ function FilterOptions({
         <Container className="w-100 mb-4 d-flex flex-column flex-md-row justify-content-center align-items-center m-0 p-0">
             <Row className="w-100">
                 <Col xs={8}>
-                    <Search setSearch={setSearch} />
+                    <Search handleSearch={handleSearch} />
                 </Col>
 
                 <Col className="">
                     <Popover
                         placement="bottom"
                         trigger="click"
-                        content={content}
-                    >
+                        content={content}>
                         <Button className="btn-success w-100">Filters</Button>
                     </Popover>
                 </Col>
