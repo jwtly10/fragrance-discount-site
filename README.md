@@ -1,7 +1,9 @@
 
 # discount-finder-api
 
-REST Api based application for parsing Fragrance Stores APIs, finding products with the best discounts.
+https://fragrancefinder.uk/products/mens
+
+REST Api based web app for parsing Fragrance Stores APIs, finding products with the best discounts. Deploy on Heroku (Springboot Server) and Netlify (React App).
 
 Some features:
 - Calling the products endpoint
@@ -12,16 +14,10 @@ api/v1/stores/theperfumeshop/mens?sort=max_discount
 
 Returns a list of discounted fragrance products from the [ThePerfumeShop's](https://www.theperfumeshop.com) Mens range, sorted by Most to Least discounted.
 
-Behind the scenes, this calls the stores' internal APIs (where possible), and parses each potential page concurrently, checking 1000's of products for discounts in only a few seconds - returning a list of only the on sale products on the site. 
+Behind the scenes, this calls the stores' internal APIs (where possible), and parses each potential page concurrently, checking 1000's of products for discounts - returning a list of only the on sale products on the site. 
 
 Frontend React Site reads from these APIs and produces a storefront allowing for easy purchasing of discounted perfumes.
-- Calling the subscribe endpoint
-```
-api/v1/subscribe/{email}
-```
-Email list endpoint allows users to sign up for deals as SOON as they come in, a background job parses these sites regularly and sends out an email with the best deals daily.
 
-Some other server side filters have also been implemented.
 ## Requirements
 
 For building and running the application you need:
