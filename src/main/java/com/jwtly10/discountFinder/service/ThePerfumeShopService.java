@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -27,7 +29,8 @@ import java.util.concurrent.CompletableFuture;
 public class ThePerfumeShopService implements IStoreService {
 
     private final Site site;
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
     private final HttpHeaders headers;
 
 
@@ -37,7 +40,6 @@ public class ThePerfumeShopService implements IStoreService {
                 "https://www.theperfumeshop.com",
                 "https://media.theperfumeshop.com"
         );
-        this.restTemplate = new RestTemplate();
         this.headers = new HttpHeaders();
     }
 
@@ -69,9 +71,7 @@ public class ThePerfumeShopService implements IStoreService {
             log.info("ThePerfumeShop Total pages to parse for {}: {} ", gender, totalPages);
             log.info("ThePerfumeShop Total products to parse: {}", totalResults);
 
-
             List<Product> productList = new ArrayList<>();
-
 
             List<CompletableFuture<Collection<Product>>> futures = new ArrayList<>();
 
@@ -148,14 +148,13 @@ public class ThePerfumeShopService implements IStoreService {
             headers.set("User-Agent", "PostmanRuntime/7.32.3");
 
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-            RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<?> result = restTemplate.exchange(newUrl, HttpMethod.GET, entity, String.class);
             JSONObject jsonObject = new JSONObject(result.getBody().toString());
             JSONArray products = jsonObject.getJSONArray("products");
             for (int j = 0; j < products.length(); j++) {
                 Product product = parseJson(products.getJSONObject(j));
                 // Only return if product is in stock and discounted
-                if (product.isInStock() && product.getDiscount() > 0 && product.getBrand() != "UNKNOWN") {
+                if (product.isInStock() && product.getDiscount() > 0 && !Objects.equals(product.getBrand(), "UNKNOWN")) {
                     productList.add(product);
                 }
             }
