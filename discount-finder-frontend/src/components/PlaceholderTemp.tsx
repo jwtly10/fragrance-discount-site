@@ -7,7 +7,7 @@ function PlaceholderTemp() {
             <p className="text-warning text-center">
                 {' '}
                 The first load might take up to 10 seconds... We have thousands
-                of products to process to find you the best deal🤭
+                of products to process to find you the best deal 🤭
             </p>
             {[...Array(12)].map((_, index: number) => {
                 return (
