@@ -11,10 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,9 +30,12 @@ import java.util.concurrent.CompletableFuture;
 @Log4j2
 public class ThePerfumeShopService implements IStoreService {
 
-    private final Site site;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private CacheManager cacheManager;
+    private final Site site;
+
     private final HttpHeaders headers;
 
 
@@ -43,17 +48,17 @@ public class ThePerfumeShopService implements IStoreService {
         this.headers = new HttpHeaders();
     }
 
+
     public List<Product> getDiscountedProducts(String apiUrl, String gender) {
         if (!Validate.isGender(gender)) {
             throw new StoreServiceException("Invalid Gender: " + gender);
         }
 
-        String apiUrlIn = apiUrl;
         try {
-            apiUrlIn = switch (Gender.valueOf(gender)) {
+            String apiUrlIn = switch (Gender.valueOf(gender)) {
                 case mens -> apiUrl.replace("gender", "C102");
                 case womens -> apiUrl.replace("gender", "C101");
-                default -> apiUrlIn;
+                default -> apiUrl;
             };
 
             log.debug("ThePerfumeShop API URL: {}", apiUrlIn);
@@ -94,6 +99,17 @@ public class ThePerfumeShopService implements IStoreService {
             log.error("Error Parsing {} Store JSON, {}", site.getName(), e.getMessage(), e);
             throw new StoreServiceException("Error Parsing " + site.getName() + ". Please try again.");
         }
+    }
+
+    @Override
+    @Scheduled(fixedRateString = "${caching.spring.productsTTL}")
+    public void clearCache() {
+        if (Objects.requireNonNull(cacheManager.getCacheNames()).isEmpty()) {
+            log.info("Cache is empty");
+            return;
+        }
+        log.info("Clearing {} Cache", site.getName());
+        cacheManager.getCacheNames().forEach(cacheName -> Objects.requireNonNull(cacheManager.getCache(cacheName)).clear());
     }
 
     public Product parseJson(JSONObject json) {
