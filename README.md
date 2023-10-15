@@ -1,6 +1,8 @@
 # discount-finder-api
 
 https://fragrancefinder.uk/products/mens
+<img width="1412" alt="Screenshot 2023-10-15 at 19 51 36" src="https://github.com/jwtly10/discount-finder-api/assets/39057715/a13032dd-9429-40d2-8df7-797b24091136">
+
 
 REST Api based web app for parsing Fragrance Stores APIs, finding products with the best discounts. Deploy on Heroku (Springboot Server) and Netlify (React App).
 
